@@ -1,9 +1,4 @@
-﻿module Runner
+﻿namespace AdventOfCode2017FSharp
 
-open System.IO
-
-let run title source func =
-    let input = File.ReadAllText source
-    printfn "%s %i" title (func input)
-
-
+module Runner =
+    let run title input func = printfn "%s %i" title (func input)
