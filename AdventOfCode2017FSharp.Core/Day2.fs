@@ -3,9 +3,6 @@
 module Day2 =
     open System
 
-    let parse (input : string) = 
-        input.Split "\r\n" |> Array.map (fun line -> line.Split [|' ';'\t'|] |> Array.map int)
-
     let calculate part (input : seq<int[]>) =
         let rowValuePart1 row = 
             let min, max = row
