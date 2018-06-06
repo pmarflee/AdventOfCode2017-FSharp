@@ -5,7 +5,7 @@ open AdventOfCode2017FSharp
 open System.IO
 
 [<EntryPoint>]
-let main argv =
+let main _ =
     printfn "Advent of Code 2017 Solutions"
     printfn "============================="
     printfn ""
@@ -22,6 +22,8 @@ let main argv =
     Runner.run "Day 4 Part 1:" (read "Day4.txt") (Parser.parseWords >> Day4.calculate 2)
     Runner.run "Day 5 Part 1:" (read "Day5.txt") (Day5.parse >> Day5.calculate 1)
     Runner.run "Day 5 Part 2:" (read "Day5.txt") (Day5.parse >> Day5.calculate 2)
+    Runner.run "Day 6 Part 1:" (read "Day6.txt") (Day6.parse >> Day6.calculate 1)
+    Runner.run "Day 6 Part 2:" (read "Day6.txt") (Day6.parse >> Day6.calculate 2)
 
     printfn ""
     printfn "Finished"

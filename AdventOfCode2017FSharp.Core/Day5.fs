@@ -3,7 +3,7 @@
 module Day5 =
     open System
 
-    let parse input = input |> Parser.parseNumbers |> Array.map (fun line -> line.[0])
+    let parse input = input |> Parser.parseNumbers |> Parser.asSingleColumn
 
     let calculate part input =
         

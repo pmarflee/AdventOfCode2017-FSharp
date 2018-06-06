@@ -9,3 +9,5 @@ module Parser =
    let parseWords input = parse input id
    
    let parseNumbers input = parse input int
+
+   let asSingleColumn (input : 'a [][]) = input |> Array.map (fun line -> line.[0])
