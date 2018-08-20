@@ -2,8 +2,11 @@
 
 module Parser =
 
+   let splitLines (input : string) = input.Split "\r\n"
+
    let parse (input : string) wordParser =  
-        input.Split "\r\n" 
+        input
+            |> splitLines
             |> Array.map (fun line -> line.Split [|' ';'\t'|] |> Array.map wordParser)
 
    let parseWords input = parse input id
