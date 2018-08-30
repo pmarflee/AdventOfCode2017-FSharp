@@ -19,9 +19,14 @@ module Day7 =
           |> Seq.map (fun c -> (c.Value, c.Value)) 
           |> Map.ofSeq } 
 
-    let parse input = Parser.splitLines input |> Array.map parseLine
+    let parse input = Parser.splitLines input 
+                        |> Array.map parseLine 
+                        |> Array.map (fun line -> (line.Name, line))
+                        |> Map.ofArray
 
-    let findBottomProgram lines =
-        lines |> Array.find 
-            (fun line -> (not << Array.exists 
-                            (fun l -> l.Dependents.ContainsKey(line.Name) )) lines)
+    let findBottomProgram (lines : Map<string, Line>) =
+        let found = lines |> Map.findKey 
+                                (fun _ line -> (not << Map.exists 
+                                                    (fun _ line' -> 
+                                                        line'.Dependents.ContainsKey(line.Name) )) lines)
+        lines.[found]
