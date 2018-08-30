@@ -24,6 +24,13 @@
                       [| "gyxo (61)"; { Name = "gyxo"; Weight = 61; Dependents = Map.empty } |];
                       [| "cntj (57)"; { Name = "cntj"; Weight = 57; Dependents = Map.empty } |] ]
 
+            static member Programs
+                with get() =
+                    Tests.LineData 
+                    |> List.map (fun line -> string (Array.head line))
+                    |> String.concat "\r\n"
+                    |> parse
+
             [<Theory>]
             [<MemberData("LineData")>]
             member verify.``Line can be parsed`` (input : string, expected : Line) =
@@ -31,9 +38,11 @@
 
             [<Fact>]
             member verify.``Find bottom program`` () =
-                let result = Tests.LineData 
-                                |> List.map (fun line -> string (Array.head line))
-                                |> String.concat "\r\n"
-                                |> parse
-                                |> findBottomProgram
-                result.Name |> should equal "tknk"
+                (calculatePart1 Tests.Programs).Name |> should equal "tknk"
+
+            [<Fact>]
+            member verify.``Find correct weight`` () =
+                let programs = Tests.Programs
+                let bottomProgram = calculatePart1 programs
+
+                calculateCorrectWeight programs bottomProgram |> should equal 60

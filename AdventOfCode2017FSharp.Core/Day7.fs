@@ -24,9 +24,31 @@ module Day7 =
                         |> Array.map (fun line -> (line.Name, line))
                         |> Map.ofArray
 
-    let findBottomProgram (lines : Map<string, Line>) =
+    let calculateCorrectWeight (lines : Map<string, Line>) bottom =
+        let rec getWeight key =
+            let program = lines.[key]
+            let dependentWeights = program.Dependents |> Seq.sumBy (fun kv -> getWeight kv.Key)
+            program.Weight + dependentWeights
+
+        let dependentWeights = bottom.Dependents |> Map.map (fun k _ -> getWeight k) 
+        let groups = dependentWeights
+                        |> Seq.groupBy (fun x -> x.Value)
+                        |> Seq.sortBy (fun x -> snd x |> Seq.length)
+                        |> Seq.toArray
+        let keyOfProgramToAdjust = ((snd groups.[0]) |> Seq.head).Key
+        let program = lines.[keyOfProgramToAdjust]
+        let adjustment = fst groups.[1] - fst groups.[0]
+
+        program.Weight + adjustment
+
+    let calculatePart1 lines =
         let found = lines |> Map.findKey 
                                 (fun _ line -> (not << Map.exists 
                                                     (fun _ line' -> 
                                                         line'.Dependents.ContainsKey(line.Name) )) lines)
         lines.[found]
+
+    let calculatePart2 lines =
+        let bottomProgram = calculatePart1 lines
+
+        calculateCorrectWeight lines bottomProgram
