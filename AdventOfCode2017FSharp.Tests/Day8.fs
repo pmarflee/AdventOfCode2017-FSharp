@@ -7,7 +7,7 @@
 
         type Tests () =
 
-            static member Instructions
+            static member InstructionData
                 with get() =
                     [ [| "b inc 5 if a > 1" :> obj; 
                          { Register = "b"; 
@@ -38,9 +38,25 @@
                                          Operator = Equals;
                                          Amount = 10 } } |] ]
 
+            static member InstructionInput
+                with get() =
+                    Tests.InstructionData
+                    |> List.map (fun line -> string (Array.head line))
+                    |> String.concat "\r\n"
+
+            static member Instructions
+                with get() =
+                    Tests.InstructionData
+                    |> List.map (fun line -> line.[1] :?> Instruction)
+                    |> Array.ofList
+
             [<Theory>]
-            [<MemberData("Instructions")>]
+            [<MemberData("InstructionData")>]
             member verify.``Instruction can be parsed`` (input : string, expected : Instruction) =
                 parseInstruction input |> should equal expected
+
+            [<Fact>]
+            member verify.``Input can be parsed`` () =
+                parse Tests.InstructionInput |> should equal Tests.Instructions
 
     

@@ -46,3 +46,7 @@ module Day8 =
           Condition = { Register = m.Groups.["cond_reg"].Value;
                         Operator = Operator.Parse m.Groups.["cond_op"].Value;
                         Amount = int m.Groups.["cond_amt"].Value } }
+
+    let parse input = Parser.splitLines input
+                        |> Array.map parseInstruction
+        
