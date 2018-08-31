@@ -3,6 +3,7 @@
 module Day8 =
 
     open System.Text.RegularExpressions
+    open System
 
     type Register = string
 
@@ -49,4 +50,6 @@ module Day8 =
 
     let parse input = Parser.splitLines input
                         |> Array.map parseInstruction
-        
+
+    let calculatePart1 instructions = 
+       raise (NotImplementedException "Not implemented")

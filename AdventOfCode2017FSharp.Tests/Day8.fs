@@ -59,4 +59,8 @@
             member verify.``Input can be parsed`` () =
                 parse Tests.InstructionInput |> should equal Tests.Instructions
 
+            [<Fact>]
+            member verify.``Calculate largest value in any register`` () =
+                Tests.Instructions |> calculatePart1 |> should equal 1
+
     
