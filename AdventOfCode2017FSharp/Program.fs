@@ -26,7 +26,8 @@ let main _ =
     Runner.run "Day 6 Part 2:" (read "Day6.txt") (Day6.parse >> Day6.calculate 2)
     Runner.run "Day 7 Part 1:" (read "Day7.txt") (Day7.parse >> Day7.calculatePart1)
     Runner.run "Day 7 Part 2:" (read "Day7.txt") (Day7.parse >> Day7.calculatePart2)
-    Runner.run "Day 8 Part 1:" (read "Day8.txt") (Day8.parse >> Day8.calculatePart1)
+    Runner.run "Day 8 Part 1:" (read "Day8.txt") (Day8.parse >> Day8.calculate 1)
+    Runner.run "Day 8 Part 2:" (read "Day8.txt") (Day8.parse >> Day8.calculate 2)
 
     printfn ""
     printfn "Finished"

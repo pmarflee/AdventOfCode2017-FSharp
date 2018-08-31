@@ -69,4 +69,8 @@
 
             [<Fact>]
             member verify.``Calculate largest value in any register`` () =
-                Tests.Instructions |> calculatePart1 |> should equal 1
+                Tests.Instructions |> calculate 1 |> should equal 1
+
+            [<Fact>]
+            member verify.``Calculate largest value in any register during the process`` () =
+                Tests.Instructions |> calculate 2 |> should equal 10

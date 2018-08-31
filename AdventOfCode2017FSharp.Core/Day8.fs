@@ -3,6 +3,7 @@
 module Day8 =
 
     open System.Text.RegularExpressions
+    open System
 
     type Register = string
 
@@ -38,14 +39,18 @@ module Day8 =
                          AdjustmentType : AdjustmentType;
                          AdjustmentAmount : int;
                          Condition : Condition } with
-        member this.Execute registers =
+        member this.Execute registers largest =
             match this.Condition.IsSatisfiedBy registers with
                 | true ->
                     let currentValue = readRegister registers this.Register
                     let newValue = this.AdjustmentType currentValue this.AdjustmentAmount
-                    Map.add this.Register newValue registers
-                | false -> registers
-        static member Exec registers (instruction : Instruction) = instruction.Execute registers
+                    let newRegisters = Map.add this.Register newValue registers
+                    let newLargest = 
+                        if Option.isNone largest || newValue > largest.Value then newValue 
+                        else largest.Value
+                    newRegisters, Some(newLargest)
+                | false -> registers, largest
+        static member Exec (registers, largest : int option) (instruction : Instruction) = instruction.Execute registers largest
 
     let private regex = new Regex("(?<reg>[a-z]+)\s(?<adj_type>inc|dec)\s(?<adj_amt>-?\d+)\sif\s(?<cond_reg>[a-z]+)\s(?<cond_op>\>|\<|\>=|\<=|==|!=)\s(?<cond_amt>-?\d+)")
 
@@ -61,10 +66,15 @@ module Day8 =
     let parse input = Parser.splitLines input
                         |> Array.map parseInstruction
 
-    let calculatePart1 instructions = 
-        instructions
-            |> Array.fold Instruction.Exec Map.empty<string, int>
-            |> Map.toSeq
-            |> Seq.sortByDescending (fun (_, value) -> value)
-            |> Seq.head
-            |> snd
+    let calculate part instructions =
+        let result = instructions |> Array.fold Instruction.Exec (Map.empty<string, int>, None)
+
+        match part with
+            | 1 -> result 
+                    |> fst
+                    |> Map.toSeq
+                    |> Seq.sortByDescending (fun (_, value) -> value)
+                    |> Seq.head
+                    |> snd
+            | 2 -> (snd result).Value
+            | _ -> raise <| new ArgumentOutOfRangeException("part", "Should be '1' or '2'")
