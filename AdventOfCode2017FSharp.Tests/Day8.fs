@@ -7,35 +7,41 @@
 
         type Tests () =
 
+            let instructionsAreEqual expected actual =
+                actual.Register |> should equal expected.Register
+                actual.AdjustmentAmount |> should equal expected.AdjustmentAmount
+                actual.Condition.Register |> should equal expected.Condition.Register
+                actual.Condition.Amount |> should equal expected.Condition.Amount
+
             static member InstructionData
                 with get() =
                     [ [| "b inc 5 if a > 1" :> obj; 
                          { Register = "b"; 
-                           AdjustmentType = Increase; 
+                           AdjustmentType = (+); 
                            AdjustmentAmount = 5; 
                            Condition = { Register = "a"; 
-                                         Operator = GreaterThan; 
+                                         Operator = (>); 
                                          Amount = 1 } } :> obj |];
                       [| "a inc 1 if b < 5";
                          { Register = "a";
-                           AdjustmentType = Increase;
+                           AdjustmentType = (+);
                            AdjustmentAmount = 1;
                            Condition = { Register = "b";
-                                         Operator = LessThan;
+                                         Operator = (<);
                                          Amount = 5 } } |];
                       [| "c dec -10 if a >= 1";
                          { Register = "c";
-                           AdjustmentType = Decrease;
+                           AdjustmentType = (-);
                            AdjustmentAmount = -10;
                            Condition = { Register = "a";
-                                         Operator = GreaterThanOrEqual;
+                                         Operator = (>=);
                                          Amount = 1 } } |];
                       [| "c inc -20 if c == 10";
                          { Register = "c";
-                           AdjustmentType = Increase;
+                           AdjustmentType = (+);
                            AdjustmentAmount = -20;
                            Condition = { Register = "c";
-                                         Operator = Equals;
+                                         Operator = (=);
                                          Amount = 10 } } |] ]
 
             static member InstructionInput
@@ -53,14 +59,14 @@
             [<Theory>]
             [<MemberData("InstructionData")>]
             member verify.``Instruction can be parsed`` (input : string, expected : Instruction) =
-                parseInstruction input |> should equal expected
+                instructionsAreEqual expected (parseInstruction input)
 
             [<Fact>]
             member verify.``Input can be parsed`` () =
-                parse Tests.InstructionInput |> should equal Tests.Instructions
+                parse Tests.InstructionInput 
+                    |> Array.zip Tests.Instructions
+                    |> Array.iter (fun (actual, expected) -> instructionsAreEqual expected actual)
 
             [<Fact>]
             member verify.``Calculate largest value in any register`` () =
                 Tests.Instructions |> calculatePart1 |> should equal 1
-
-    
