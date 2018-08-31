@@ -68,4 +68,3 @@ module Day8 =
             |> Seq.sortByDescending (fun (_, value) -> value)
             |> Seq.head
             |> snd
-       //raise (NotImplementedException "Not implemented")
