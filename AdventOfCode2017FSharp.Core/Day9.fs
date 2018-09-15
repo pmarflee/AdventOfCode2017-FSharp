@@ -8,7 +8,8 @@ module Day9 =
 
     type State = { Score : int;
                    Depth : int;
-                   Mode : Mode }
+                   Mode : Mode;
+                   Garbage : int; }
                    member this.HasFlag flag = this.Mode &&& flag = flag
                    member this.SetFlag flag = this.Mode ||| flag
                    member this.ToggleFlag flag = this.Mode ^^^ flag
@@ -33,7 +34,10 @@ module Day9 =
     let (|EndGarbage|_|) ((state : State, c : char)) =
         if c = '>' && state.HasFlag Mode.Garbage then Some() else None
 
-    let calculate (input : char list) = 
+    let (|IsGarbage|_|) ((state : State, _)) =
+        if state.HasFlag Mode.Garbage then Some() else None
+
+    let calculate (part : int) (input : char list) = 
         let result = input |> List.fold 
                                 (fun state c -> 
                                     match (state, c) with
@@ -50,6 +54,11 @@ module Day9 =
                                         { state with Mode = Mode.Garbage }
                                     | EndGarbage ->
                                         { state with Mode = Mode.Group }
+                                    | IsGarbage ->
+                                        { state with Garbage = state.Garbage + 1 }
                                     | _ -> state) 
-                                { Score = 0; Depth = 0; Mode = Mode.Group }
-        result.Score
+                                { Score = 0; Depth = 0; Mode = Mode.Group; Garbage = 0 }
+        match part with
+            | 1 -> result.Score
+            | 2 -> result.Garbage
+            | _ -> raise <| new ArgumentOutOfRangeException("part", "Should be '1' or '2'")
