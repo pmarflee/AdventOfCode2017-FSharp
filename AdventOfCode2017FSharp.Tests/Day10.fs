@@ -33,6 +33,11 @@
             member verify. ``Should calculate correct result for Part 1`` (input, numbers, expected) =
                 Day10.calculate numbers (Day10.parsePart1 input) |> should equal expected
 
+            [<Theory>]
+            [<MemberData("InputPart1TestData")>]
+            member verify.``Should correctly parse Part 1 lengths`` (input, expected) =
+                Day10.parsePart1 input |> should equal expected
+
             static member ReverseLengthTestData
                 with get() =
                     let theoryData = new TheoryData<int[], int, int, int, (int[] * int * int)>()
@@ -47,4 +52,12 @@
                     let theoryData = new TheoryData<string, int[], int>()
                     theoryData.Add("3,4,1,5", [|0..4|], 12)
                     theoryData.Add("206,63,255,131,65,80,238,157,254,24,133,2,16,0,1,3", [|0..255|], 9656)
+                    theoryData
+
+            static member InputPart1TestData
+                with get() =
+                    let theoryData = new TheoryData<string, int[]>()
+                    theoryData.Add(
+                        "206,63,255,131,65,80,238,157,254,24,133,2,16,0,1,3",
+                        [|206;63;255;131;65;80;238;157;254;24;133;2;16;0;1;3|])
                     theoryData
