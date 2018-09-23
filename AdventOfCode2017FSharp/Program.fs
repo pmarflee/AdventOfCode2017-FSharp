@@ -30,7 +30,8 @@ let main _ =
     Runner.run "Day 8 Part 2:" (read "Day8.txt") (Day8.parse >> Day8.calculate 2)
     Runner.run "Day 9 Part 1:" (read "Day9.txt") (Day9.parse >> Day9.calculate 1)
     Runner.run "Day 9 Part 2:" (read "Day9.txt") (Day9.parse >> Day9.calculate 2)
-    Runner.run "Day 10 Part 1:" (read "Day10.txt") (Day10.parsePart1 >> Day10.calculate [|0..255|])
+    Runner.run "Day 10 Part 1:" (read "Day10.txt") (Day10.parsePart1 >> Day10.calculatePart1 [|0..255|])
+    Runner.run "Day 10 Part 2:" (read "Day10.txt") (Day10.parsePart2 >> Day10.addSecret >> Day10.calculatePart2 [|0..255|])
 
     printfn ""
     printfn "Finished"

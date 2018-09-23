@@ -1,8 +1,15 @@
 ﻿namespace AdventOfCode2017FSharp.Core
 
 module Day10 =
+    open Day3
 
     let parsePart1 input = Parser.parseNumbers [|','|] input |> Array.head
+
+    let standardLengthSuffixValues = [|17; 31; 73; 47; 23|]
+
+    let parsePart2 (input : string) = input |> Seq.toArray |> Array.map int
+    
+    let addSecret input = Array.concat [ input; standardLengthSuffixValues ]
 
     let reverseLength (numbers : int[]) length position skipsize =
         let rec reverse i = 
@@ -18,9 +25,34 @@ module Day10 =
                 reverse (i + 1)
         reverse position
 
-    let calculate numbers lengths =
-        let (numbers', _, _) = 
+    let calculate numbers lengths position skipsize rounds =
+        let calculate' numbers' position' skipsize' =
             lengths |> Array.fold 
-                (fun (numbers', position, skipsize) length -> 
-                    reverseLength numbers' length position skipsize) (numbers, 0, 0)
+                (fun (n, p, s) length -> 
+                    reverseLength n length p s) (numbers', position', skipsize')
+
+        let rec calculateRound numbers' position' skipsize' round =
+            if round > rounds then (numbers', position', skipsize')
+            else
+                let (n, p, s) = calculate' numbers' position' skipsize'
+                calculateRound n p s (round + 1)
+
+        calculateRound numbers position skipsize 1
+
+    let calculatePart1 numbers lengths =
+        let (numbers', _, _) = calculate numbers lengths 0 0 1
         numbers'.[0] * numbers'.[1]
+
+    let toDenseHash (sparseHash : int[]) =
+       sparseHash 
+           |> Seq.splitInto (sparseHash.Length / 16)
+           |> Seq.map (fun chunk -> chunk |> Array.reduce (fun acc n -> acc ^^^ n))
+           |> Seq.toArray
+
+    let toHex (denseHash : int[]) =
+        denseHash |> Seq.map (sprintf "%02x") |> String.concat ""
+
+    let calculatePart2 numbers lengths =
+        let (numbers', _, _) = calculate numbers lengths 0 0 64
+        numbers' |> toDenseHash |> toHex
+        
