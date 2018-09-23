@@ -6,7 +6,7 @@ module Day6 =
     type State = { Cycles : int; History : Map<string, int> }
     type Bank = { Index : int; Number : int }
 
-    let parse input = input |> Parser.parseNumbers |> Array.head
+    let parse input = input |> Parser.parseNumbers Parser.splitChars |> Array.head
 
     let calculate part (input : int []) =
         

@@ -2,7 +2,7 @@
 
 module Day10 =
 
-    let numbers = [206;63;255;131;65;80;238;157;254;24;133;2;16;0;1;3]
+    let parsePart1 input = Parser.parseNumbers [|','|] input |> Array.head
 
     let reverseLength (numbers : int[]) length position skipsize =
         let rec reverse i = 
@@ -18,9 +18,9 @@ module Day10 =
                 reverse (i + 1)
         reverse position
 
-    let calculate (numbers : int[]) lengths =
+    let calculate numbers lengths =
         let (numbers', _, _) = 
-            lengths |> List.fold 
+            lengths |> Array.fold 
                 (fun (numbers', position, skipsize) length -> 
                     reverseLength numbers' length position skipsize) (numbers, 0, 0)
         numbers'.[0] * numbers'.[1]

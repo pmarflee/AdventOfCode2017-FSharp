@@ -3,7 +3,7 @@
 module Day5 =
     open System
 
-    let parse input = input |> Parser.parseNumbers |> Parser.asSingleColumn
+    let parse input = input |> Parser.parseNumbers Parser.splitChars |> Parser.asSingleColumn
 
     let calculate part input =
         

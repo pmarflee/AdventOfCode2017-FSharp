@@ -28,6 +28,11 @@
                 let (_, _, actual) = Day10.reverseLength input length position skipsize
                 actual |> should equal expected
 
+            [<Theory>]
+            [<MemberData("Part1TestData")>]
+            member verify. ``Should calculate correct result for Part 1`` (input, numbers, expected) =
+                Day10.calculate numbers (Day10.parsePart1 input) |> should equal expected
+
             static member ReverseLengthTestData
                 with get() =
                     let theoryData = new TheoryData<int[], int, int, int, (int[] * int * int)>()
@@ -37,6 +42,9 @@
                     theoryData.Add([|4;3;0;1;2|], 5, 1, 3, ([|3;4;2;1;0|], 4, 4))
                     theoryData
 
-            [<Fact>]
-            member verify. ``Should calculate correct result for knot hash`` () =
-                Day10.calculate [|0;1;2;3;4|] [3;4;1;5] |> should equal 12
+            static member Part1TestData
+                with get() =
+                    let theoryData = new TheoryData<string, int[], int>()
+                    theoryData.Add("3,4,1,5", [|0..4|], 12)
+                    theoryData.Add("206,63,255,131,65,80,238,157,254,24,133,2,16,0,1,3", [|0..255|], 9656)
+                    theoryData

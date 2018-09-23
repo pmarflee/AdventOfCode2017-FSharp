@@ -14,4 +14,4 @@ open AdventOfCode2017FSharp.Core
 [<InlineData("iiii oiii ooii oooi oooo", 2, 1)>]
 [<InlineData("oiii ioii iioi iiio", 2, 0)>]
 let ``Calculate High-Entropy Passphrase`` input part expected =
-    input |> Parser.parseWords |> Day4.calculate part |> should equal expected
+    input |> Parser.parseWords Parser.splitChars |> Day4.calculate part |> should equal expected
