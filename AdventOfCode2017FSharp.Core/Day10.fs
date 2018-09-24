@@ -1,7 +1,6 @@
 ﻿namespace AdventOfCode2017FSharp.Core
 
 module Day10 =
-    open Day3
 
     let parsePart1 input = Parser.parseNumbers [|','|] input |> Array.head
 
@@ -11,21 +10,22 @@ module Day10 =
     
     let addSecret input = Array.concat [ input; standardLengthSuffixValues ]
 
-    let reverseLength (numbers : int[]) length position skipsize =
+    let reverseLength numbers length position skipsize =
+        let countOfNumbers = Array.length numbers
         let rec reverse i = 
             let j = position + length - (i - position) - 1
             if i >= j then 
-                (numbers, (position + length + skipsize) % numbers.Length, skipsize + 1)
+                (numbers, (position + length + skipsize) % countOfNumbers, skipsize + 1)
             else
-                let index_i = i % numbers.Length
-                let index_j = j % numbers.Length
+                let index_i = i % countOfNumbers
+                let index_j = j % countOfNumbers
                 let tmp = numbers.[index_i]
                 numbers.[index_i] <- numbers.[index_j]
                 numbers.[index_j] <- tmp
                 reverse (i + 1)
         reverse position
 
-    let calculate numbers lengths position skipsize rounds =
+    let calculate numbers lengths rounds =
         let calculate' numbers' position' skipsize' =
             lengths |> Array.fold 
                 (fun (n, p, s) length -> 
@@ -37,21 +37,21 @@ module Day10 =
                 let (n, p, s) = calculate' numbers' position' skipsize'
                 calculateRound n p s (round + 1)
 
-        calculateRound numbers position skipsize 1
+        calculateRound numbers 0 0 1
 
     let calculatePart1 numbers lengths =
-        let numbers' = calculate numbers lengths 0 0 1
+        let numbers' = calculate numbers lengths 1
         numbers'.[0] * numbers'.[1]
 
-    let toDenseHash (sparseHash : int[]) =
+    let toDenseHash sparseHash =
        sparseHash 
-           |> Seq.splitInto (sparseHash.Length / 16)
-           |> Seq.map (fun chunk -> chunk |> Array.reduce (fun acc n -> acc ^^^ n))
+           |> Seq.splitInto ((Array.length sparseHash) / 16)
+           |> Seq.map (Array.reduce (^^^))
            |> Seq.toArray
 
-    let toHex (denseHash : int[]) =
+    let toHex denseHash =
         denseHash |> Seq.map (sprintf "%02x") |> String.concat ""
 
     let calculatePart2 numbers lengths = 
-        calculate numbers lengths 0 0 64 |> toDenseHash |> toHex
+        calculate numbers lengths 64 |> toDenseHash |> toHex
         
