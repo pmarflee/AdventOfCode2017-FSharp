@@ -26,15 +26,15 @@ module Day10 =
         reverse position
 
     let calculate numbers lengths rounds =
-        let calculate' numbers' position' skipsize' =
+        let calculate' numbers position skipsize =
             lengths |> Array.fold 
                 (fun (n, p, s) length -> 
-                    reverseLength n length p s) (numbers', position', skipsize')
+                    reverseLength n length p s) (numbers, position, skipsize)
 
-        let rec calculateRound numbers' position' skipsize' round =
-            if round > rounds then numbers'
+        let rec calculateRound numbers position skipsize round =
+            if round > rounds then numbers
             else
-                let (n, p, s) = calculate' numbers' position' skipsize'
+                let (n, p, s) = calculate' numbers position skipsize
                 calculateRound n p s (round + 1)
 
         calculateRound numbers 0 0 1
