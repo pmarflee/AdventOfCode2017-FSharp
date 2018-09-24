@@ -7,13 +7,13 @@ Technologies used
 -----------------
 
 - F#
-- .NET Core 2.0
+- .NET Core 2.1
 
 ### Development setup
 
 Prerequisites:
 
-* [.NET Core 2.0](https://www.microsoft.com/net/core) (or later) SDK
+* [.NET Core 2.1](https://www.microsoft.com/net/core) (or later) SDK
 
 To run, open a console prompt within the AdventOfCode2017FSharp\AdventOfCode2017FSharp folder, then execute the following commands:
 
