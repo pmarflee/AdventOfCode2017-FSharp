@@ -32,7 +32,7 @@ module Day10 =
                     reverseLength n length p s) (numbers', position', skipsize')
 
         let rec calculateRound numbers' position' skipsize' round =
-            if round > rounds then (numbers', position', skipsize')
+            if round > rounds then numbers'
             else
                 let (n, p, s) = calculate' numbers' position' skipsize'
                 calculateRound n p s (round + 1)
@@ -40,7 +40,7 @@ module Day10 =
         calculateRound numbers position skipsize 1
 
     let calculatePart1 numbers lengths =
-        let (numbers', _, _) = calculate numbers lengths 0 0 1
+        let numbers' = calculate numbers lengths 0 0 1
         numbers'.[0] * numbers'.[1]
 
     let toDenseHash (sparseHash : int[]) =
@@ -52,7 +52,6 @@ module Day10 =
     let toHex (denseHash : int[]) =
         denseHash |> Seq.map (sprintf "%02x") |> String.concat ""
 
-    let calculatePart2 numbers lengths =
-        let (numbers', _, _) = calculate numbers lengths 0 0 64
-        numbers' |> toDenseHash |> toHex
+    let calculatePart2 numbers lengths = 
+        calculate numbers lengths 0 0 64 |> toDenseHash |> toHex
         
